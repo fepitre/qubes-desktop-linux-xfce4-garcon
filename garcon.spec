@@ -1,34 +1,32 @@
 # Review at https://bugzilla.redhat.com/show_bug.cgi?id=554603
 
 %global minorversion 0.6
+%global xfceversion 4.13
 
 Name:           garcon
 Epoch:		1000
-Version:        0.6.1
-Release:        1%{?dist}
+Version:        0.6.2
+Release:        2%{?dist}
 Summary:        Implementation of the freedesktop.org menu specification
 
-Group:          System Environment/Libraries
 # garcon's source code is licensed under the LGPLv2+,
 # while its documentation is licensed under the GFDL 1.1
 License:        LGPLv2+ and GFDL
 URL:            http://xfce.org/
 #VCS git:git://git.xfce.org/xfce/garcon
-Source0:        http://archive.xfce.org/src/xfce/%{name}/%{minorversion}/%{name}-%{version}.tar.bz2
+Source0:        http://archive.xfce.org/src/libs/%{name}/%{minorversion}/%{name}-%{version}.tar.bz2
 Source1:        xfce-documentation.directory
 Patch0:         garcon-0.4.0-qubes-menus.patch
-Patch1:         fix_large_icons.patch
 
 BuildRequires:  pkgconfig(glib-2.0) >= 2.30.0
-BuildRequires:  pkgconfig(libxfce4util-1.0) >= 4.10.0
-BuildRequires:	pkgconfig(libxfce4ui-1) >= 4.10.0
-BuildRequires:	pkgconfig(libxfce4ui-2) >= 4.11.1
-BuildRequires:	pkgconfig(gio-2.0) >= 2.30.0
-BuildRequires:	pkgconfig(gobject-2.0) >= 2.30.0
-BuildRequires:	pkgconfig(gthread-2.0) >= 2.30.0
-BuildRequires:	pkgconfig(gtk+-2.0) >= 2.24.0
-BuildRequires:	pkgconfig(gtk+-3.0) >= 3.14.0
-
+BuildRequires:  pkgconfig(libxfce4util-1.0) >= %{xfceversion}
+BuildRequires:  pkgconfig(libxfce4ui-1) >= %{xfceversion}
+BuildRequires:  pkgconfig(libxfce4ui-2) >= %{xfceversion}
+BuildRequires:  pkgconfig(gio-2.0) >= 2.30.0
+BuildRequires:  pkgconfig(gobject-2.0) >= 2.30.0
+BuildRequires:  pkgconfig(gthread-2.0) >= 2.30.0
+BuildRequires:  pkgconfig(gtk+-2.0) >= 2.24.0
+BuildRequires:  pkgconfig(gtk+-3.0) >= 3.14.0
 BuildRequires:  gcc-c++
 BuildRequires:  gtk-doc
 BuildRequires:  gettext
@@ -47,7 +45,6 @@ aims at covering the entire specification except for legacy menus.
 
 %package        devel
 Summary:        Development files for %{name}
-Group:          Development/Libraries
 Requires:       %{name} = %{version}-%{release}
 Requires:       gtk2-devel
 Requires:       pkgconfig
@@ -57,31 +54,32 @@ Obsoletes:      libxfce4menu-devel < 4.6.2
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+
 %prep
 %setup -q
 %patch0 -p1 -b.redhat-menus
-%patch1 -p1
+
 
 %build
 %configure --disable-static --enable-gtk-doc
-make %{?_smp_mflags} V=1
+
+%make_build
+
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT INSTALL='install -p'
+%make_install
 
 # fix permissions for libraries
 chmod 755 $RPM_BUILD_ROOT/%{_libdir}/*.so
 
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
+
 %find_lang %{name}
 install -pm 644 %{SOURCE1} %{buildroot}%{_datadir}/desktop-directories
 
-%posttrans
-gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-
 %files -f %{name}.lang
-%doc AUTHORS ChangeLog COPYING NEWS README
+%license COPYING
+%doc AUTHORS ChangeLog NEWS README
 %config(noreplace) %{_sysconfdir}/xdg/menus/xfce-applications.menu
 %{_libdir}/*.so.*
 %{_datadir}/desktop-directories/*.directory
@@ -94,6 +92,43 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %doc %{_datadir}/gtk-doc/
 
 %changelog
+* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Fri Dec 07 2018 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 0.6.2-1
+- Update to 0.6.2
+- Drop unnecessary patches
+
+* Fri Sep 07 2018 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 0.6.1-21
+- Add patch to fix large icons (fixes bug#1624292)
+
+* Sat Aug 11 2018 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 0.6.1-20
+- Rebuild for xfce version 4.13
+
+* Mon Jul 16 2018 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 0.6.1-6
+- Add gcc-c++ as BR
+
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
+
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
+* Fri Jul 07 2017 Kevin Fenzi <kevin@scrye.com> - 0.6.1-1
+- Update to 0.6.1. Fixes bug #1468765
+
+* Mon Apr 17 2017 Kevin Fenzi <kevin@scrye.com> - 0.6.0-1
+- Update to 0.6.0.
+
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.5.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Fri Jul 29 2016 Kevin Fenzi <kevin@scrye.com> - 0.5.0-1
 - Update to 0.5.0. Fixes bug #1361565
 
