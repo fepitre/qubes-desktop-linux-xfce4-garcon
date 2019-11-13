@@ -6,7 +6,7 @@
 Name:           garcon
 Epoch:		1000
 Version:        0.6.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Implementation of the freedesktop.org menu specification
 
 # garcon's source code is licensed under the LGPLv2+,
