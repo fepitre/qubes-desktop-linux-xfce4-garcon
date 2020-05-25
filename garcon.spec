@@ -1,12 +1,12 @@
 # Review at https://bugzilla.redhat.com/show_bug.cgi?id=554603
 
 %global minorversion 0.6
-%global xfceversion 4.13
+%global xfceversion 4.14
 
 Name:           garcon
 Epoch:		1000
-Version:        0.6.2
-Release:        3%{?dist}
+Version:        0.6.4
+Release:        4%{?dist}
 Summary:        Implementation of the freedesktop.org menu specification
 
 # garcon's source code is licensed under the LGPLv2+,
@@ -31,6 +31,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  gtk-doc
 BuildRequires:  gettext
 BuildRequires:  intltool
+BuildRequires:  gobject-introspection-devel
 
 Obsoletes:      libxfce4menu < 4.6.3
 # because of %%{_datadir}/desktop-directories/xfce-*
@@ -92,6 +93,28 @@ install -pm 644 %{SOURCE1} %{buildroot}%{_datadir}/desktop-directories
 %doc %{_datadir}/gtk-doc/
 
 %changelog
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.4-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
+* Mon Aug 12 2019 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 0.6.4-3
+- Rebuild for xfce 4.14
+
+* Tue Jul 30 2019 Mukundan Ragavan <nonamedotc@gmail.com> - 0.6.4-2
+- rebuild for xfce 4.14pre3
+
+* Mon Jul 29 2019 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 0.6.4-1
+- Update to 0.6.4
+
+* Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+* Tue Jul 02 2019 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 0.6.3-2
+- Rebuild for libxfce4util and libxfce4ui
+- Add gobject-introspection-devel as buildrequires
+
+* Mon Jul 01 2019 Mukundan Ragavan <nonamedotc@fedoraproject.org> - 0.6.3-1
+- Update to 0.6.3
+
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
