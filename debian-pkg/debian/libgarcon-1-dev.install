@@ -1,0 +1,7 @@
+usr/include/garcon-1
+usr/lib/*/libgarcon-1*.so
+usr/lib/*/pkgconfig/garcon-1*
+usr/share/gtk-doc/html/garcon/*
+usr/include/garcon-gtk2-1
+usr/lib/*/libgarcon-gtk2-1*.so
+usr/lib/*/pkgconfig/garcon-gtk2-1*
